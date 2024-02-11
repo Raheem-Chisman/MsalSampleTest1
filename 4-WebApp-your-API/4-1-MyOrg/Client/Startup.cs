@@ -41,32 +41,32 @@ namespace WebApp_OpenIDConnect_DotNet
                 options.HandleSameSiteCookieCompatibility();
             });
 
-            services.AddOptions();
+            //services.AddOptions();
 
             // The following lines of code adds the ability to authenticate users of this web app.
             // Refer to https://github.com/AzureAD/microsoft-identity-web/wiki/web-apps to learn more
-            services.AddMicrosoftIdentityWebAppAuthentication(Configuration)
-                    .EnableTokenAcquisitionToCallDownstreamApi(
-                        Configuration.GetSection("TodoList:Scopes").Get<string[]>()
-                     )
-                    .AddInMemoryTokenCaches();
+            //services.AddMicrosoftIdentityWebAppAuthentication(Configuration)
+              //      .EnableTokenAcquisitionToCallDownstreamApi(
+                //        Configuration.GetSection("TodoList:Scopes").Get<string[]>()
+                  //   )
+                    //.AddInMemoryTokenCaches();
 
             // This is how we configure certificates in startup - see README-use-certificate.md for more details on how to use this section
             // Also read more at  - https://github.com/AzureAD/microsoft-identity-web/wiki/Certificates
-            //services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-            //    .AddMicrosoftIdentityWebApp(microsoftIdentityOptions =>
-            //    {
-            //        Configuration.Bind("AzureAd", microsoftIdentityOptions);
-            //        microsoftIdentityOptions.ClientCertificates = new CertificateDescription[] {
-            //        CertificateDescription.FromKeyVault("[Enter URL for you Key Vault]",
-            //                                            "TodoListClient-aspnetcore-webapi")};
-            //    })
-            //    .EnableTokenAcquisitionToCallDownstreamApi(confidentialClientApplicationOptions =>
-            //    {
-            //        Configuration.GetSection("TodoList:TodoListScopes").Get<string>().Split(" ", System.StringSplitOptions.RemoveEmptyEntries);
-            //        Configuration.Bind("AzureAd", confidentialClientApplicationOptions);
-            //    })
-            //      .AddInMemoryTokenCaches();
+               services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+                .AddMicrosoftIdentityWebApp(microsoftIdentityOptions =>
+                {
+                    Configuration.Bind("AzureAd", microsoftIdentityOptions);
+                    microsoftIdentityOptions.ClientCertificates = new CertificateDescription[] {
+                    CertificateDescription.FromKeyVault("https://daboivault2.vault.azure.net/",
+                                                        "TestAssertion")};
+                })
+                .EnableTokenAcquisitionToCallDownstreamApi(confidentialClientApplicationOptions =>
+                {
+                   // Configuration.GetSection("TodoList:TodoListScopes").Get<string>().Split(" ", System.StringSplitOptions.RemoveEmptyEntries);
+                    Configuration.Bind("AzureAd", confidentialClientApplicationOptions);
+                })
+                  .AddInMemoryTokenCaches();
 
 
             // Add APIs
