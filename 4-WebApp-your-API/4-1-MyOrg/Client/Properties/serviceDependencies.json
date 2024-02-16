@@ -2,6 +2,10 @@
   "dependencies": {
     "secrets1": {
       "type": "secrets"
+    },
+    "compute.appService1": {
+      "group": "connections",
+      "type": "compute.appService"
     }
   }
 }
